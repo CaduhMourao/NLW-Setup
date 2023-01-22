@@ -1,9 +1,14 @@
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 
-const weekDays = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
+import { generateDatesFromYearBeginning } from "../utils/generate-ranger-between-dates";
 
 import { HabitDay, DAY_SIZE } from "../components/HabitDay";
 import { Header } from "../components/Header";
+
+const weekDays = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
+const datesFromYearBeginning = generateDatesFromYearBeginning();
+const minimumSummaryDatesSizes = 18 * 5;
+const amountOfDaysToFill = minimumSummaryDatesSizes - datesFromYearBeginning.length;
 
 export function Home() {
     return (
@@ -23,8 +28,33 @@ export function Home() {
                     ))
                 }
             </View>
+            
+            <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 100 }}
+            >
+                <View className="flex-row flex-wrap">
+                    {
+                        datesFromYearBeginning.map(date => (
+                            <HabitDay
+                                key={date.toISOString()}
+                            />
+                        ))
+                    }
 
-            <HabitDay />
+                    {
+                        amountOfDaysToFill > 0 && Array
+                        .from({ length: amountOfDaysToFill })
+                        .map((_, index) => (
+                            <View
+                                className="bg-zinc-900 rounded-lg border-2 m-1 border-zinc-800 opacity-40"
+                                style={{ width: DAY_SIZE, height: DAY_SIZE }}
+                            />
+                        ))
+                    }
+                </View>
+            </ScrollView>
+            
         </View>
     )
 }
