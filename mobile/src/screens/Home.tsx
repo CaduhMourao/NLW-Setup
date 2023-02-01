@@ -1,12 +1,12 @@
 import { Alert, ScrollView, Text, View } from "react-native";
 
+import { useEffect, useState } from "react";
+import { api } from "../lib/axios";
 import { generateDatesFromYearBeginning } from "../utils/generate-ranger-between-dates";
 
 import { HabitDay, DAY_SIZE } from "../components/HabitDay";
 import { Header } from "../components/Header";
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
-import { api } from "../lib/axios";
 import { Loading } from "../components/Loading";
 import dayjs from "dayjs";
 
@@ -29,22 +29,21 @@ export function Home() {
     const { navigate } = useNavigation();
 
     async function fetchData() {
-        try {
-            setLoading(true);
-            const response = await api.get('summary')
-
-            setSummary(response.data);
-        } catch (error) {
-            Alert.alert('Ops', 'Não foi possivel carregar o sumário de hábitos.')
-            console.log(error);
-        } finally {
-            setLoading(false);
-        }
+    try {
+      setLoading(true)
+      const response = await api.get('/summary');
+      setSummary(response.data)
+    } catch (error) {
+      Alert.alert('Ops', 'Não foi possível carregar o sumário de hábitos.')
+      console.log(error)
+    } finally {
+      setLoading(false)
     }
+  }
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+  useEffect(() => {
+      fetchData()
+    }, [])
 
     if(loading) {
         return (
